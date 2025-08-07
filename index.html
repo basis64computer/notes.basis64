@@ -35,6 +35,23 @@
 
     <!-- Main Content -->
     <main class="mx-auto px-4 py-12">
+
+
+<div class="w-full mx-auto">
+    <div class="flex">
+        <div class="relative w-full mb-4">
+            <input type="search" id="searchInput" class="block p-2.5 w-full z-20 text-base text-gray-900 bg-gray-50 rounded-sm border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-s-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500" placeholder="Cari judul atau catatan...." onkeydown="search();" required />
+            <!--button type="button" class="absolute top-0 end-0 p-2.5 px-4 text-sm font-medium h-full text-white bg-blue-700 rounded-e-sm border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onclick="search();">
+                <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                </svg>
+                <span class="sr-only">Cari</span>
+            </button-->
+        </div>
+    </div>
+</div>
+
+
       <div class="grid sm:grid-cols-3 gap-4" id="notesList">
         
       </div>
@@ -189,24 +206,52 @@
   const created = document.getElementById('created');
   const modified = document.getElementById('modified');
   const notesList = document.getElementById('notesList');
+  const searchInput = document.getElementById('searchInput');
   title.value = '';
     description.value = '';
     created.value = '';
     modified.value = '';
 
-  function createNoteList() {
+    /*searchInput.addEventListener("keydown", function (event) {
+    if (event.key) {
+      event.preventDefault(); // opsional, mencegah submit jika dalam form
+      search();
+      // panggil fungsi lain di sini
+    }
+  });*/
+
+  function search() {
+    const lower = searchInput.value.toLowerCase();
+
+    let result = notes.filter(note =>
+        note.title.toLowerCase().includes(lower) ||
+        note.description.toLowerCase().includes(lower)
+      );
+
+    createNoteList(result);
+  }
+
+
+  function createNoteList(notesData = notes) {
     notesList.innerHTML = '';
-    for (var i = 0; i < notes.length; i++) {
-      let element = `<button class="bg-blue-100 border border-blue-600 hover:bg-blue-200 text-left" command="show-modal" commandfor="editor-dialog" onclick="loadNote(${notes[i].id})">
-          <div class="p-4">
-            <h1 class="font-medium sm:text-2xl text-blue-800">${notes[i].title}</h1>
-          <p class="text-base text-blue-900 mb-4">${notes[i].description}</p>
-          </div>
-          <div class="bg-blue-600 p-4">
-            <p class="text-blue-50">Dibuat pada: ${formatUTCTimestamp(notes[i].created)}</p>
-            <p class="text-blue-50">Diubah pada: ${formatUTCTimestamp(notes[i].modified)}</p>
-          </div>
-        </button>`;
+    let color = 'gray';
+    for (var i = 0; i < notesData.length; i++) {
+      let element = `<button
+  class="flex flex-col h-full w-full bg-${color}-100 border border-${color}-600 hover:bg-${color}-200 text-left"
+  command="show-modal"
+  commandfor="editor-dialog"
+  onclick="loadNote(${notesData[i].id})"
+>
+  <div class="p-4 grow">
+    <h1 class="font-medium sm:text-2xl text-${color}-800">${notesData[i].title}</h1>
+    <p class="text-base text-${color}-900 mb-4">${notesData[i].description}</p>
+  </div>
+  <div class="bg-${color}-600 p-4">
+    <p class="text-${color}-50">Dibuat pada: ${formatUTCTimestamp(notesData[i].created)}</p>
+    <p class="text-${color}-50">Diubah pada: ${formatUTCTimestamp(notesData[i].modified)}</p>
+  </div>
+</button>
+`;
         notesList.innerHTML += element;
     }
   }
@@ -239,15 +284,21 @@
       return;
 
     let data = {title: title.value, description: description.value};
+    console.log(data);
     try {
-      let response = await fetch(`https://notes.basis64computer.workers.dev/notes/${selectedNote?selectedNote:''}`, {method: selectedNote?'PUT':'POST', headers: {
+      let response = await fetch(`https://notes.basis64computer.workers.dev/notes${selectedNote?'/' + selectedNote:''}`, {method: selectedNote?'PUT':'POST', headers: {
     'Content-Type': 'application/json'
   }, body: JSON.stringify(data)});
       if (response.status == 200) {
         document.getElementById('success-dialog-text').innerHTML = "Catatan disimpan.";
         document.getElementById('success-dialog').showModal();
-        note.title = title.value;
-        note.description = description.value;
+        if (note) {
+          note.title = title.value;
+          note.description = description.value;
+          note.modified = new Date().getTime();
+        } else {
+          notes.unshift(await response.json());
+        }
         createNoteList();
       } else {
         document.getElementById('failed-dialog-text').innerHTML = "Tidak dapat menyimpan catatan.";
@@ -256,6 +307,7 @@
     } catch (error) {
       document.getElementById('failed-dialog-text').innerHTML = "Tidak dapat menyimpan catatan.";
       document.getElementById('failed-dialog').showModal();
+      console.log(error.message);
     }
   }
 

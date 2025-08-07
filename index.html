@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BASIS-64 Notes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Open+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="font-sans text-gray-800">
+    <!-- Navigation -->
+    <nav class="bg-white shadow sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+        <a href="index.html" class="text-lg font-bold flex items-center"><img src="assets/img/logo.png" width="48px"> BASIS-64 Notes</a>
+        <button class="lg:hidden text-gray-700">
+          <i class="fas fa-bars"></i>
+        </button>
+        <ul class="lg:flex space-x-6">
+          <li><button class="bg-blue-600 text-white px-4 py-2 tracking-wide hover:bg-blue-700 hidden sm:inline-block" command="show-modal" commandfor="editor-dialog">Buat Catatan <i class="bi bi-plus"></i></button></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="relative h-96 flex items-center justify-center text-white">
+      <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('assets/img/home-bg.jpg')"></div>
+      <div class="absolute inset-0 bg-black opacity-50"></div>
+      <div class="relative text-center z-10">
+        <h1 class="text-xl sm:text-5xl font-bold">Buat Catatan di Sini</h1>
+        <p class="text-base sm:text-xl mt-2 mb-4">Semua catatan di sini bersifat publik dan dapat diakses siapa saja.</p>
+        <button class="border text-white text-base sm:text-xl px-4 py-2 tracking-wide hover:bg-white hover:text-black" command="show-modal" commandfor="editor-dialog">Buat Catatan</button>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="mx-auto px-4 py-12">
+      <div class="grid sm:grid-cols-3 gap-4" id="notesList">
+        
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t py-8">
+      <div class="max-w-3xl mx-auto px-4 text-center">
+        <div class="flex justify-center space-x-4 mb-4">
+          <a href="#!" class="text-gray-600 hover:text-blue-500 text-xl"><i class="fab fa-twitter"></i></a>
+          <a href="#!" class="text-gray-600 hover:text-blue-700 text-xl"><i class="fab fa-facebook-f"></i></a>
+          <a href="#!" class="text-gray-600 hover:text-black text-xl"><i class="fab fa-github"></i></a>
+        </div>
+        <p class="text-sm text-gray-500 italic">Copyright &copy; BASIS-64 2025</p>
+      </div>
+    </footer>
+    <!-- Include this script tag or install `@tailwindplus/elements` via npm: -->
+<script src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1" type="module"></script>
+<el-dialog>
+  <dialog id="editor-dialog" aria-labelledby="dialog-title" class="fixed inset-0 size-auto max-h-none max-w-none overflow-y-auto bg-transparent backdrop:bg-transparent">
+    <el-dialog-backdrop class="fixed inset-0 bg-black/75 transition-opacity data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in"></el-dialog-backdrop>
+
+    <div tabindex="0" class="flex min-h-full items-end justify-center p-4 w-full text-center focus:outline-none sm:items-center sm:p-0">
+      <el-dialog-panel class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all data-closed:translate-y-4 data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in sm:my-8 w-full sm:max-w-4xl data-closed:sm:translate-y-0 data-closed:sm:scale-95">
+        <form id="note-editor-form" class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+          <h3 id="dialog-title" class="text-lg font-semibold text-gray-900 mb-4">Edit Catatan</h3>
+
+          <div class="mb-4">
+            <label for="title" class="block text-sm font-medium text-gray-700">Judul</label>
+            <input type="text" name="title" id="title" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
+          </div>
+
+          <div class="mb-4">
+            <label for="description" class="block text-sm font-medium text-gray-700">Deskripsi</label>
+            <textarea name="description" id="description" rows="8" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
+          </div>
+
+            <div>
+              <label for="created" class="block text-sm font-medium text-gray-700">Dibuat</label>
+              <input type="text" name="created" id="created" class="mb-4 bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled />
+            </div>
+            <div>
+              <label for="modified" class="block text-sm font-medium text-gray-700">Diubah</label>
+              <input type="text" name="modified" id="modified" class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled />
+            </div>
+        </form>
+
+        <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+          <button type="submit" command="close" commandfor="editor-dialog" onclick="saveNote();" class="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 sm:ml-2 sm:w-auto">Simpan</button>
+          <button type="button" command="close" commandfor="editor-dialog" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50 sm:mt-0 sm:w-auto">Batal</button>
+          <button type="button" command="close" commandfor="editor-dialog" class="sm:mr-2 inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-red-500 sm:ml-3 sm:w-auto" onclick="deleteConfirmation();">Hapus</button>
+        </div>
+      </el-dialog-panel>
+    </div>
+  </dialog>
+</el-dialog>
+
+
+<el-dialog>
+  <dialog id="dialog" aria-labelledby="dialog-title" class="fixed inset-0 size-auto max-h-none max-w-none overflow-y-auto bg-transparent backdrop:bg-transparent">
+    <el-dialog-backdrop class="fixed inset-0 bg-black/75 transition-opacity data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in"></el-dialog-backdrop>
+
+    <div tabindex="0" class="flex min-h-full items-end justify-center p-4 text-center focus:outline-none sm:items-center sm:p-0">
+      <el-dialog-panel class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all data-closed:translate-y-4 data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in sm:my-8 sm:w-full sm:max-w-lg data-closed:sm:translate-y-0 data-closed:sm:scale-95">
+        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+          <div class="sm:flex sm:items-start">
+            <div class="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:size-10">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" data-slot="icon" aria-hidden="true" class="size-6 text-red-600">
+                <path d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </div>
+            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+              <h3 id="dialog-title" class="text-base font-semibold text-gray-900">Hapus Catatan</h3>
+              <div class="mt-2">
+                <p class="text-sm text-gray-500">Catatan ini akan dihapus secara permanen. Tindakan ini tidak dapat dibatalkan. Hapus catatan ini?</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+          <button type="button" command="close" commandfor="dialog" class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-red-500 sm:ml-3 sm:w-auto" onclick="deleteNote();">Hapus</button>
+          <button type="button" command="close" commandfor="dialog" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50 sm:mt-0 sm:w-auto">Batal</button>
+        </div>
+      </el-dialog-panel>
+    </div>
+  </dialog>
+</el-dialog>
+
+<el-dialog>
+  <dialog id="success-dialog" aria-labelledby="dialog-title" class="fixed inset-0 size-auto max-h-none max-w-none overflow-y-auto bg-transparent backdrop:bg-transparent">
+    <el-dialog-backdrop class="fixed inset-0 bg-black/75 transition-opacity data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in"></el-dialog-backdrop>
+
+    <div tabindex="0" class="flex min-h-full items-end justify-center p-4 text-center focus:outline-none sm:items-center sm:p-0">
+      <el-dialog-panel class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all data-closed:translate-y-4 data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in sm:my-8 sm:w-full sm:max-w-lg data-closed:sm:translate-y-0 data-closed:sm:scale-95">
+        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+          <div class="sm:flex sm:items-start">
+            <div class="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full bg-blue-100 sm:mx-0 sm:size-10">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" data-slot="icon" aria-hidden="true" class="size-6 text-blue-600">
+                <path d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </div>
+            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+              <h3 id="dialog-title" class="text-base font-semibold text-gray-900">Informasi</h3>
+              <div class="mt-2">
+                <p class="text-sm text-gray-500" id="success-dialog-text">Catatan disimpan.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+          <button type="button" command="close" commandfor="success-dialog" class="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 sm:ml-3 sm:w-auto">Tutup</button>
+        </div>
+      </el-dialog-panel>
+    </div>
+  </dialog>
+</el-dialog>
+
+<el-dialog>
+  <dialog id="failed-dialog" aria-labelledby="dialog-title" class="fixed inset-0 size-auto max-h-none max-w-none overflow-y-auto bg-transparent backdrop:bg-transparent">
+    <el-dialog-backdrop class="fixed inset-0 bg-black/75 transition-opacity data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in"></el-dialog-backdrop>
+
+    <div tabindex="0" class="flex min-h-full items-end justify-center p-4 text-center focus:outline-none sm:items-center sm:p-0">
+      <el-dialog-panel class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all data-closed:translate-y-4 data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in sm:my-8 sm:w-full sm:max-w-lg data-closed:sm:translate-y-0 data-closed:sm:scale-95">
+        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+          <div class="sm:flex sm:items-start">
+            <div class="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:size-10">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" data-slot="icon" aria-hidden="true" class="size-6 text-red-600">
+                <path d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </div>
+            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+              <h3 id="dialog-title" class="text-base font-semibold text-gray-900">Informasi</h3>
+              <div class="mt-2">
+                <p class="text-sm text-gray-500" id="failed-dialog-text">Tidak dapat menyimpan catatan.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+          <button type="button" command="close" commandfor="failed-dialog" class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-red-500 sm:ml-3 sm:w-auto">Tutup</button>
+        </div>
+      </el-dialog-panel>
+    </div>
+  </dialog>
+</el-dialog>
+
+<script type="text/javascript">
+  let selectedNote = 0;
+  let notes;
+  const title = document.getElementById('title');
+  const description = document.getElementById('description');
+  const created = document.getElementById('created');
+  const modified = document.getElementById('modified');
+  const notesList = document.getElementById('notesList');
+  title.value = '';
+    description.value = '';
+    created.value = '';
+    modified.value = '';
+
+  function createNoteList() {
+    notesList.innerHTML = '';
+    for (var i = 0; i < notes.length; i++) {
+      let element = `<button class="bg-blue-100 border border-blue-600 hover:bg-blue-200 text-left" command="show-modal" commandfor="editor-dialog" onclick="loadNote(${notes[i].id})">
+          <div class="p-4">
+            <h1 class="font-medium sm:text-2xl text-blue-800">${notes[i].title}</h1>
+          <p class="text-base text-blue-900 mb-4">${notes[i].description}</p>
+          </div>
+          <div class="bg-blue-600 p-4">
+            <p class="text-blue-50">Dibuat pada: ${formatUTCTimestamp(notes[i].created)}</p>
+            <p class="text-blue-50">Diubah pada: ${formatUTCTimestamp(notes[i].modified)}</p>
+          </div>
+        </button>`;
+        notesList.innerHTML += element;
+    }
+  }
+
+  loadNotes();
+
+  async function loadNotes() {
+    let response = await fetch('https://notes.basis64computer.workers.dev/notes');
+    notes = await response.json();
+    createNoteList();
+  }
+
+  function loadNote(id = 0) {
+    selectedNote = id;
+    if (!id)
+      return;
+
+    let note = notes.find(n => n.id === id);
+    if (!note)
+      return;
+
+    title.value = note.title;
+    description.value = note.description;
+    created.value = formatUTCTimestamp(note.created);
+    modified.value = formatUTCTimestamp(note.modified);
+  }
+  async function saveNote() {
+    let note = notes.find(n => n.id === selectedNote);
+    if (!note && selectedNote != 0)
+      return;
+
+    let data = {title: title.value, description: description.value};
+    try {
+      let response = await fetch(`https://notes.basis64computer.workers.dev/notes/${selectedNote?selectedNote:''}`, {method: selectedNote?'PUT':'POST', headers: {
+    'Content-Type': 'application/json'
+  }, body: JSON.stringify(data)});
+      if (response.status == 200) {
+        document.getElementById('success-dialog-text').innerHTML = "Catatan disimpan.";
+        document.getElementById('success-dialog').showModal();
+        note.title = title.value;
+        note.description = description.value;
+        createNoteList();
+      } else {
+        document.getElementById('failed-dialog-text').innerHTML = "Tidak dapat menyimpan catatan.";
+        document.getElementById('failed-dialog').showModal();
+      }
+    } catch (error) {
+      document.getElementById('failed-dialog-text').innerHTML = "Tidak dapat menyimpan catatan.";
+      document.getElementById('failed-dialog').showModal();
+    }
+  }
+
+  async function deleteNote() {
+    let note = notes.find(n => n.id === selectedNote);
+    if (!note && selectedNote != 0)
+      return;
+
+    let data = {title: title.value, description: description.value};
+    try {
+      let response = await fetch(`https://notes.basis64computer.workers.dev/notes/${selectedNote}`, {method: 'DELETE', headers: {
+    'Content-Type': 'application/json'
+  }, body: JSON.stringify(data)});
+      if (response.status == 200) {
+        document.getElementById('success-dialog-text').innerHTML = "Catatan dihapus.";
+        document.getElementById('success-dialog').showModal();
+        notes = notes.filter(note => note.id !== selectedNote);
+        selectedNote = 0;
+        createNoteList();
+      } else {
+        document.getElementById('failed-dialog-text').innerHTML = "Tidak dapat menghapus catatan.";
+        document.getElementById('failed-dialog').showModal();
+      }
+    } catch (error) {
+      document.getElementById('failed-dialog-text').innerHTML = "Tidak dapat menghapus catatan.";
+      document.getElementById('failed-dialog').showModal();
+    } 
+  }
+
+  function deleteConfirmation() {
+    document.getElementById('dialog').showModal();
+  }
+
+  function formatUTCTimestamp(timestamp) {
+    const date = new Date(timestamp);
+
+    const hariMap = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+    const bulanMap = [
+      "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+      "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+    ];
+
+    const hari = hariMap[date.getDay()];
+    const tanggal = date.getDate();
+    const bulan = bulanMap[date.getMonth()];
+    const tahun = date.getFullYear();
+
+    const jam = String(date.getHours()).padStart(2, '0');
+    const menit = String(date.getMinutes()).padStart(2, '0');
+    const detik = String(date.getSeconds()).padStart(2, '0');
+
+    return `${hari}, ${tanggal} ${bulan} ${tahun} - ${jam}:${menit}:${detik}`;
+  }
+
+</script>
+
+  </body>
+</html>
